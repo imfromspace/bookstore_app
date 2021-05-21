@@ -1,16 +1,14 @@
 """
 Concerned with storing and retrieving books from a SQLite database.
 """
-import sqlite3
+from .database_connection import DatabaseConnection
 
 
 def _execute_db_query(query, *args):
-    connection = sqlite3.connect("data.db")
-    cursor = connection.cursor()
-    cursor.execute(query, args)
-    connection.commit()
-    res = cursor.fetchall()
-    connection.close()
+    with DatabaseConnection("data.db") as connection:
+        cursor = connection.cursor()
+        cursor.execute(query, args)
+        res = cursor.fetchall()
     return res
 
 
@@ -21,7 +19,7 @@ def create_book_table():
 def add_book(name, author):
     try:
         _execute_db_query('INSERT INTO books VALUES(?, ?, 0)', name, author)
-    except sqlite3.IntegrityError:
+    except Exception:
         print("This book is already in database.")
 
 
