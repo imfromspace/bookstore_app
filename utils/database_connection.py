@@ -2,11 +2,11 @@ import sqlite3
 
 
 class DatabaseConnection:
-    def __init__(self, host):
+    def __init__(self, host: str):
         self.host = host
         self.connection = None
 
-    def __enter__(self):
+    def __enter__(self) -> sqlite3.Connection:
         self.connection = sqlite3.connect(self.host)
         return self.connection
 
